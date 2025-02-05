@@ -47,7 +47,7 @@ aftp1 <- function(printlevel, ns, nn, id,
         beta[i] <- log(sum(Y[, 2] - Y[, 1]) / sum(Y[, 3]))
     }
 
-    res <- optim(beta, Fexpmin, method = "BFGS",
+    res <- optim(beta, Fexpmin, method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
 
@@ -56,7 +56,7 @@ aftp1 <- function(printlevel, ns, nn, id,
     beta <- c(rep(0, ncov), res$par)
     loglik.start <- -res$value
 
-    res1 <- optim(beta, Fexpmin, method = "BFGS",
+    res1 <- optim(beta, Fexpmin, method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
 

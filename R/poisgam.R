@@ -89,7 +89,7 @@ poisgam <- function(X, y, start.coef,
     res1 <- optim(par, Pfun, gr = Pgrad,
                   X = X, y = y, cluster = cluster, offset = offset,
                   ##method = "L-BFGS-B",
-                  method = "BFGS",
+                  method = getOption("eha.optim.method", default = "BFGS"),
                   ##lower = rep(-50, p + 1),
                   ##upper = rep(50, p + 1),
                   control = list(fnscale = -1, trace = 5), hessian = TRUE)

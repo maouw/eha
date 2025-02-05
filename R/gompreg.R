@@ -144,7 +144,7 @@ gompreg <- function(X, Y, strata, offset, init, control, center){
           ##  beta[(ncov + 2 * i - 1):(ncov + 2 * i)], "\n\n")
     }
     res0 <- optim(beta0, Fmin, gr = dGomp,
-                 method = "BFGS",
+                 method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(fnscale = -1, reltol = 1e-10),
                  hessian = FALSE)
     ## Done; now the real thing:
@@ -167,7 +167,7 @@ gompreg <- function(X, Y, strata, offset, init, control, center){
     
 
     res <- optim(beta, Fmin, gr = dGomp,
-                 method = "BFGS",
+                 method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(fnscale = -1, reltol = 1e-10),
                  hessian = TRUE)
     if (res$convergence != 0) stop("[gompreg]: No convergence")

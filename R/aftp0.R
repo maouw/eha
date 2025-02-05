@@ -42,12 +42,12 @@ aftp0 <- function(printlevel, ns, nn, id,
         beta[2*i] <- 0
     }
     
-    loglik.start <- -optim(beta, Fmin, method = "BFGS", hessian = FALSE)$value
+    loglik.start <- -optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"), hessian = FALSE)$value
     ## And now the real thing:
     ncov <- ncov.save
     bdim <- ncov + 2 * ns
     beta <- c(rep(0, ncov), beta)
-    res <- optim(beta, Fmin, method = "BFGS",
+    res <- optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
     fit <- list(beta = res$par, loglik = c(loglik.start, -res$value))

@@ -169,7 +169,7 @@ pchreg.fit <- function(X, Y, cuts, offset, strata, init, control){
         }
         beta <- init
         res <- optim(beta, loglik, dloglik,
-                     method = "BFGS", hessian = TRUE, 
+                     method = getOption("eha.optim.method", default = "BFGS"), hessian = TRUE, 
                      control = list(fnscale = -1, reltol = 1e-10))
         beta <- res$par
         fit$gradient <- dloglik(beta)

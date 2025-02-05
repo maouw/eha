@@ -143,7 +143,7 @@ tpchreg.fit <- function(X, count, exposure, offset, weights, strata, time,
         }
         beta <- init
         res <- optim(beta, loglik, dloglik,
-                     method = "BFGS", hessian = TRUE, 
+                     method = getOption("eha.optim.method", default = "BFGS"), hessian = TRUE, 
                      control = list(fnscale = -1, reltol = 1e-10))
         if (res$convergence > 0){
             if (res$convergence == 1){

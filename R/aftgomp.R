@@ -113,7 +113,7 @@ function (X, Y, strata, offset, init, control, center)
         beta0[(2 * i - 1):(2 * i)] <- gompstartCanonical(enter, 
             exit, event, score)
     }
-    res0 <- optim(beta0, Fmin, gr = dGomp, method = "BFGS", control = list(fnscale = -1, 
+    res0 <- optim(beta0, Fmin, gr = dGomp, method = getOption("eha.optim.method", default = "BFGS"), control = list(fnscale = -1, 
         reltol = 1e-10), hessian = FALSE)
     ncov <- ncov.save
     beta <- numeric(bdim)
@@ -128,7 +128,7 @@ function (X, Y, strata, offset, init, control, center)
         beta[(ncov + 2 * i - 1):(ncov + 2 * i)] <- gompstartCanonical(enter, 
             exit, event, score)
     }
-    res <- optim(beta, Fmin, gr = dGomp, method = "BFGS", control = list(fnscale = -1, 
+    res <- optim(beta, Fmin, gr = dGomp, method = getOption("eha.optim.method", default = "BFGS"), control = list(fnscale = -1, 
         reltol = 1e-10), hessian = TRUE)
     if (res$convergence != 0) 
         stop("[gompreg]: No convergence")

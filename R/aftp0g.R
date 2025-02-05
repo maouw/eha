@@ -51,7 +51,7 @@ aftp0g <- function(printlevel, ns, nn, id,
         ##beta[2*i] <- 0
     }
     ## This is not strictly becessary, but:
-    res0 <- optim(beta, Fmin, method = "BFGS", hessian = FALSE)
+    res0 <- optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"), hessian = FALSE)
     loglik.start <- -res0$value
     ##cat("\nloglik.start = ", loglik.start, "\n")
     ##cat("beta = ", res0$par, "\n\n")
@@ -60,7 +60,7 @@ aftp0g <- function(printlevel, ns, nn, id,
     ncov <- ncov.save
     bdim <- ncov + 2 * ns
     beta <- c(rep(0, ncov), beta)
-    res <- optim(beta, Fmin, method = "BFGS",
+    res <- optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
     ##cat("\nloglik = ", -res$value, "\n")

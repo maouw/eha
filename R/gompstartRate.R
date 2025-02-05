@@ -41,7 +41,7 @@ gompstartRate <- function(enter, exit, event, score, simple = TRUE){
     }
 
     rate <-  1 / max(exit) # start value
-    fit <- optim(rate, l.shape, control = list(fnscale = -1), method = "BFGS")
+    fit <- optim(rate, l.shape, control = list(fnscale = -1), method = getOption("eha.optim.method", default = "BFGS"))
     rate <- fit$par
     shape <- shape.rate(rate)
     ret <- c(rate, shape)

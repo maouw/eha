@@ -170,7 +170,7 @@ gompregRate <- function(X, Y, strata, offset, init, control){
 
     ## NULL model:
     res0 <- optim(beta0, Fmin, gr = dGomp,
-                 method = "BFGS",
+                 method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(fnscale = -1, reltol = 1e-10, 
                                 trace = printlevel),
                  hessian = FALSE)
@@ -213,7 +213,7 @@ gompregRate <- function(X, Y, strata, offset, init, control){
     ##l0 <- Fmin(beta[(ncov.save + 1):bdim])
     ##ncov <- ncov.save
     res <- optim(beta, Fmin, gr = dGomp,
-                 method = "BFGS",
+                 method = getOption("eha.optim.method", default = "BFGS"),
                  control = list(fnscale = -1, reltol = 1e-10,
                                 trace = printlevel),
                  hessian = TRUE)
