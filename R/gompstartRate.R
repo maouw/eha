@@ -41,7 +41,8 @@ gompstartRate <- function(enter, exit, event, score, simple = TRUE){
     }
 
     rate <-  1 / max(exit) # start value
-    fit <- optim(rate, l.shape, control = list(fnscale = -1), method = getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    fit <- eha.optim.fun(rate, l.shape, control = list(fnscale = -1))
     rate <- fit$par
     shape <- shape.rate(rate)
     ret <- c(rate, shape)

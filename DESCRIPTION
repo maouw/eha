@@ -23,5 +23,9 @@ Imports: stats, graphics, survival (>= 3.0)
 NeedsCompilation: yes
 Maintainer: Göran Broström <goran.brostrom@umu.se>
 RoxygenNote: 7.3.1
-Suggests: knitr, rmarkdown, bookdown
+Suggests: 
+    knitr,
+    rmarkdown,
+    bookdown,
+    ucminf
 VignetteBuilder: knitr, utils

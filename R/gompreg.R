@@ -143,8 +143,8 @@ gompreg <- function(X, Y, strata, offset, init, control, center){
         ##cat("\nSTART values (scale, shape):",
           ##  beta[(ncov + 2 * i - 1):(ncov + 2 * i)], "\n\n")
     }
-    res0 <- optim(beta0, Fmin, gr = dGomp,
-                 method = getOption("eha.optim.method", default = "BFGS"),
+    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    res0 <- eha.optim.fun(beta0, Fmin, gr = dGomp,
                  control = list(fnscale = -1, reltol = 1e-10),
                  hessian = FALSE)
     ## Done; now the real thing:
@@ -166,8 +166,7 @@ gompreg <- function(X, Y, strata, offset, init, control, center){
     }
     
 
-    res <- optim(beta, Fmin, gr = dGomp,
-                 method = getOption("eha.optim.method", default = "BFGS"),
+    res <- eha.optim.fun(beta, Fmin, gr = dGomp,
                  control = list(fnscale = -1, reltol = 1e-10),
                  hessian = TRUE)
     if (res$convergence != 0) stop("[gompreg]: No convergence")

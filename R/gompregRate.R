@@ -169,8 +169,8 @@ gompregRate <- function(X, Y, strata, offset, init, control){
     }
 
     ## NULL model:
-    res0 <- optim(beta0, Fmin, gr = dGomp,
-                 method = getOption("eha.optim.method", default = "BFGS"),
+    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    res0 <- eha.optim.fun(beta0, Fmin, gr = dGomp,
                  control = list(fnscale = -1, reltol = 1e-10, 
                                 trace = printlevel),
                  hessian = FALSE)
@@ -212,8 +212,7 @@ gompregRate <- function(X, Y, strata, offset, init, control){
     ##ncov <- 0
     ##l0 <- Fmin(beta[(ncov.save + 1):bdim])
     ##ncov <- ncov.save
-    res <- optim(beta, Fmin, gr = dGomp,
-                 method = getOption("eha.optim.method", default = "BFGS"),
+    res <- eha.optim.fun(beta, Fmin, gr = dGomp,
                  control = list(fnscale = -1, reltol = 1e-10,
                                 trace = printlevel),
                  hessian = TRUE)

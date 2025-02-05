@@ -46,8 +46,8 @@ aftp1 <- function(printlevel, ns, nn, id,
     for (i in seq_len(ns)){
         beta[i] <- log(sum(Y[, 2] - Y[, 1]) / sum(Y[, 3]))
     }
-
-    res <- optim(beta, Fexpmin, method = getOption("eha.optim.method", default = "BFGS"),
+    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    res <- eha.optim.fun(beta, Fexpmin,
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
 
@@ -56,7 +56,7 @@ aftp1 <- function(printlevel, ns, nn, id,
     beta <- c(rep(0, ncov), res$par)
     loglik.start <- -res$value
 
-    res1 <- optim(beta, Fexpmin, method = getOption("eha.optim.method", default = "BFGS"),
+    res1 <- eha.optim.fun(beta, Fexpmin,
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
 

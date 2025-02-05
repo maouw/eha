@@ -41,13 +41,13 @@ aftp0 <- function(printlevel, ns, nn, id,
         beta[2 * i - 1] <- log(sum(Y[, 2] - Y[, 1]) / sum(Y[, 3]))
         beta[2*i] <- 0
     }
-    
-    loglik.start <- -optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"), hessian = FALSE)$value
+    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    loglik.start <- -eha.optim.fun(beta, Fmin, hessian = FALSE)$value
     ## And now the real thing:
     ncov <- ncov.save
     bdim <- ncov + 2 * ns
     beta <- c(rep(0, ncov), beta)
-    res <- optim(beta, Fmin, method = getOption("eha.optim.method", default = "BFGS"),
+    res <- eha.optim.fun(beta, Fmin,
                  control = list(trace = as.integer(printlevel)),
                  hessian = TRUE)
     fit <- list(beta = res$par, loglik = c(loglik.start, -res$value))
