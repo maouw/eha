@@ -1,12 +1,10 @@
-glance.aftreg <- function (x, ...)
-{
-  stopifnot(requireNamespace("tibble",quietly=TRUE))
+glance.aftreg <- function(x, ...) {
+  stopifnot(requireNamespace("tibble", quietly = TRUE))
   iter <- x$call$control$maxiter %||% formals(eha::aftreg)$control$maxiter %||% NA_integer_
 
   if (is.null(x$df)) {
     df <- sum(!is.na(coef))
-  }
-  else {
+  } else {
     df <- round(sum(x$df), 2)
   }
 
@@ -26,43 +24,37 @@ glance.aftreg <- function (x, ...)
   )
 }
 
-tidy.aftreg <- function (x,
-                         conf.level = 0.95,
-                         conf.int = FALSE,
-                         ...)
-{
-  if ("exponentiate" %in% names(list(...))) {
-    message(
-      "The `exponentiate` argument is not supported in the `tidy()` method for `aftreg` objects and will be ignored."
-    )
-  }
+
+tidy.summary.aftreg <- function(x,
+                                conf.int = FALSE,
+                                conf.level = 0.95,
+                                exponentiate = FALSE,
+                                ...) {
   stopifnot(all(
     c("coefficients", "loglik", "linear.predictors", "ttr") %in% names(x)
   ))
-  stopifnot(requireNamespace("dplyr", quietly=TRUE))
-  stopifnot(requireNamespace("tibble",quietly=TRUE))
+  stopifnot(requireNamespace("dplyr", quietly = TRUE))
+  stopifnot(requireNamespace("tibble", quietly = TRUE))
+  ret <- tibble::as_tibble(cbind(data.frame(term = rownames(x$coefficients), stringsAsFactors = FALSE), as.data.frame(x$coefficients)[, c("coef", "se(coef)", "z", "Wald p")]))
+  colnames(ret) <- c("term", "estimate", "std.error", "statistic", "p.value")
 
-  summ <- summary(x)
-  ret <- summ$coefficients |> tibble::as_tibble(rownames = 'term') |> dplyr::select(
-    term,
-    estimate = coef,
-    std.error = `se(coef)`,
-    statistic = z,
-    p.value = `Wald p`
-  )
-  intercept_and_scale <- tibble::tibble(
-    term = c("(Intercept)", "Log(scale)"),
-    estimate = c(x$coefficients['log(scale)'], x$coefficients["log(shape)"]),
-    std.error =  sqrt(diag(x$var[c("log(scale)", "log(shape)"), c("log(scale)", "log(shape)")]))
-  ) |> dplyr::mutate(
-    statistic = estimate / std.error,
-    p.value = pchisq(statistic ^ 2, df = 1, lower.tail = FALSE)
-  )
-  ret <- dplyr::bind_rows(intercept_and_scale[1, ], ret, intercept_and_scale[2, ])
+  if (exponentiate) {
+    ret$estimate <- exp(ret$estimate)
+  }
+
   if (conf.int) {
-    ci <- tibble::as_tibble(confint(x, level = conf.level),rownames = 'term')
+    ci <- tibble::as_tibble(confint(x, level = conf.level), rownames = "term")
     names(ci) <- c("term", "conf.low", "conf.high")
     ret <- dplyr::left_join(ret, ci, by = "term")
   }
   ret
+}
+
+tidy.aftreg <- function(x,
+                        conf.int = FALSE,
+                        conf.level = 0.95,
+                        exponentiate = FALSE,
+                        ...) {
+  summ <- summary(x, use.drop1 = FALSE)
+  tidy.summary.aftreg(summ, conf.int = conf.int, conf.level = conf.level, exponentiate = exponentiate)
 }

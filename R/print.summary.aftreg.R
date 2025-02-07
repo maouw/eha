@@ -49,6 +49,7 @@ print.summary.aftreg <- function(x,
         stop("Input is not valid")
     ## Check for dr:
     lp <- !is.null(x$dr)
+    lp_str <- ifelse(lp, "LR p", "Wald p")
     if (lp){
         dr <- x$dr[rownames(x$dr) %in% x$covars, ]
         lpval <- formatC(dr[, 4], digits = digits, width = 9, format = "f")
@@ -66,9 +67,9 @@ print.summary.aftreg <- function(x,
     
 #####################################
     if (x$param == "lifeAcc"){
-        cat("Covariate            W.mean      Coef Time-Accn  se(Coef)    LR p\n")        
+        cat(sprintf("Covariate            W.mean      Coef Time-Accn  se(Coef)    %s\n", lp_str))        
     }else{
-        cat("Covariate            W.mean      Coef Life-Expn  se(Coef)    LR p\n")
+        cat(sprintf("Covariate            W.mean      Coef Life-Expn  se(Coef)    %s\n", lp_str))
     }
     e.coef <- formatC(exp(coef), width = 9, digits = 3, format = "f")
     coef <- formatC(coef, width = 9, digits = 3, format = "f")
