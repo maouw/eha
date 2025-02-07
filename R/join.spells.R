@@ -11,6 +11,7 @@
 #' length, overlapping intervals, etc.) are detected. Otherwise (the default),
 #' bad spells are removed, with "earlier life" having higher priority.
 #' @param eps Tolerance for equality of two event times. Should be kept small.
+#' @param varnames Named vector of variable names for 'enter', 'exit', 'event', and 'id'
 #' @return A data frame with the same variables as the input, but individual
 #' spells are joined, if possible (identical covariate values, and adjacent
 #' time intervals).
@@ -21,22 +22,23 @@
 #' Survival Data: Extending the Cox model.} Springer.
 #' @keywords manip survival
 #' @export join.spells
-join.spells <- function(dat, strict = FALSE, eps = 1.e-8){
+join.spells <- function(dat, strict = FALSE, eps = 1.e-8, varnames = c(enter="enter", exit="exit", event="event", id="id")){
     ## Survival data: (enter, exit], event (0-1, or TRUE/FALSE),
     ## birthdate in years since 1 jan 0, eg 1877.500 = 1 july 1877
     ## Assumes: enter, exit, event, id, birthdate
     ## Must have unique id (as a covariate).
-
-    
-    resp <- match(c("enter", "exit", "event"), names(dat))
+  
+    resp <- match(varnames, names(dat))
     if (any(is.na(resp))) stop("Wrong variable names")
     
-    koll <- match(c("id"), names(dat))
-    if (any(is.na(resp))) stop("No 'id' in variable names")
-
+    v_enter = varnames[["enter"]]
+    v_exit = varnames[["exit"]]
+    v_event = varnames[["event"]]
+    v_id = varnames[["id"]]
+    
     ## First, if strict, check data:
     if (strict){
-        res.check <- check.surv(dat$enter, dat$exit, dat$event, dat$id)
+        res.check <- check.surv(dat[[v_enter]], dat[[v_exit]], dat[[v_event]], dat[[v_id]])
         if (length(res.check)){
             cat("Error in individual(s). Return value is id of the bad.\n")
             return(res.check)
@@ -49,18 +51,18 @@ join.spells <- function(dat, strict = FALSE, eps = 1.e-8){
     }
     n.cov <- ncol(covar)
     n.rec <- nrow(covar)
-    all <- unique(dat$id)
+    all <- unique(dat[[v_id]])
     nn <- length(all)
     
-    ide <- as.integer(factor(dat$id, labels = 1:nn))
-    ord <- order(ide, dat$enter, dat$exit)
+    ide <- as.integer(factor(dat[[v_id]], labels = 1:nn))
+    ord <- order(ide, dat[[v_enter]], dat[[v_exit]])
     dat <- dat[ord, ]
     
     res <- .Fortran("cleanup",
                     as.double(t(covar)),
-                    as.double(dat$enter),
-                    as.double(dat$exit),
-                    as.integer(dat$event),
+                    as.double(dat[[v_enter]]),
+                    as.double(dat[[v_exit]]),
+                    as.integer(dat[[v_event]]),
                     as.integer(ide),
                     as.integer(n.cov),
                     as.integer(n.rec),
@@ -81,6 +83,7 @@ join.spells <- function(dat, strict = FALSE, eps = 1.e-8){
                       exit = res$exit[1:res$new.n.rec],
                       event = res$event[1:res$new.n.rec]
                       )
+    names(out) <- c(paste0("new.", v_id), v_enter, v_exit, v_event)
     
     new.cov <-
         data.frame(matrix(res$new.cov, byrow = TRUE,

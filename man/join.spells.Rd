@@ -4,7 +4,12 @@
 \alias{join.spells}
 \title{Straighten up a survival data frame}
 \usage{
-join.spells(dat, strict = FALSE, eps = 1e-08)
+join.spells(
+  dat,
+  strict = FALSE,
+  eps =  1e-08,
+  varnames = c(enter = "enter", exit = "exit", event = "event", id = "id")
+)
 }
 \arguments{
 \item{dat}{A data frame with names enter, exit, event, id.}
@@ -14,6 +19,8 @@ length, overlapping intervals, etc.) are detected. Otherwise (the default),
 bad spells are removed, with "earlier life" having higher priority.}
 
 \item{eps}{Tolerance for equality of two event times. Should be kept small.}
+
+\item{varnames}{Named vector of variable names for 'enter', 'exit', 'event', and 'id'}
 }
 \value{
 A data frame with the same variables as the input, but individual

@@ -4,12 +4,14 @@
 \alias{summary.aftreg}
 \title{Prints aftreg objects}
 \usage{
-\method{summary}{aftreg}(object, ...)
+\method{summary}{aftreg}(object, ..., use.drop1 = TRUE)
 }
 \arguments{
 \item{object}{A \code{aftreg} object}
 
 \item{\dots}{Additional ...}
+
+\item{logical}{Use \code{\link{stats::drop1}} to compute `p` values based on log odds etc.}
 }
 \description{
 Prints aftreg objects
