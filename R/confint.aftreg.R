@@ -23,9 +23,31 @@ confint.aftreg <- function(object, parm, level = 0.95, ...) {
   ), "%")
 
   cis <- cbind(lower[parm], upper[parm])
-  cis <- rbind(cis[nrow(cis), ], cis[-nrow(cis), ])
   rownames(cis) <- parm
 
   colnames(cis) <- pct
+  cis
+}
+
+
+confint.summary.aftreg <- function(object, parm, level = 0.95, ...) {
+  if (missing(parm)) {
+    parm <- rownames(object$coefficients)
+  }
+  qn <- qnorm(1 - (1 - level) / 2)
+
+  lower <- exp(object$coefficients[, 1] - qn * object$coefficients[, 3])
+  upper <- exp(object$coefficients[, 1] + qn * object$coefficients[, 3])
+  names(lower) <- names(upper) <- rownames(object$coefficients)
+
+  pct <- paste(format(
+    100 * c((1 - level) / 2, 1 - (1 - level) / 2),
+    trim = TRUE,
+    scientific = FALSE,
+    digits = 3
+  ), "%")
+  cis <- cbind(lower[parm], upper[parm])
+  colnames(cis) <- pct
+  rownames(cis) <- parm
   cis
 }
