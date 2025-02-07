@@ -27,5 +27,9 @@ Suggests:
     knitr,
     rmarkdown,
     bookdown,
-    optimx
+    optimx,
+    dplyr,
+    tibble
 VignetteBuilder: knitr, utils
+Enhances: 
+    broom
