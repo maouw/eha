@@ -3,6 +3,7 @@
 #' 
 #' @param object A \code{aftreg} object
 #' @param \dots Additional ...
+#' @param logical Use \code{\link{stats::drop1}} to compute `p` values based on log odds etc.
 #' @author Göran Broström
 #' @seealso \code{\link{print.coxreg}}
 #' @keywords survival print
@@ -13,9 +14,11 @@
 #' print(object)
 #' 
 #' @export
-summary.aftreg <- function(object, ...){
-    dr <- drop1(object, test = "Chisq")
-    object$dr <- dr
+summary.aftreg <- function(object, ..., use.drop1 = TRUE){
+    if(use.drop1) {
+        dr <- drop1(object, test = "Chisq")
+        object$dr <- dr
+    }
     ncoef <- object$df
     ## Split coefficients into regression parameters and hazard ditto.
     if (!(object$dist == "pch")){
