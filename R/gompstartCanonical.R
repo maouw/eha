@@ -40,7 +40,7 @@ gompstartCanonical <- function(enter, exit, event, score){
     }
 
     scale <- log(max(exit)) # start value
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     fit <- eha.optim.fun(scale, l.shape, control = list(fnscale = -1))
     scale <- fit$par
     shape <- shape.scale(scale)

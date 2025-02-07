@@ -51,7 +51,7 @@ aftp0g <- function(printlevel, ns, nn, id,
         ##beta[2*i] <- 0
     }
     ## This is not strictly becessary, but:
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     res0 <- eha.optim.fun(beta, Fmin, hessian = FALSE)
     loglik.start <- -res0$value
     ##cat("\nloglik.start = ", loglik.start, "\n")

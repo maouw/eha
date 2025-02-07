@@ -142,7 +142,7 @@ tpchreg.fit <- function(X, count, exposure, offset, weights, strata, time,
             X[, i] <- X[, i] - means[i]
         }
         beta <- init
-        eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+        eha.optim.fun <- get.eha.optim.fun()
         res <- eha.optim.fun(beta, loglik, dloglik,
                      hessian = TRUE, 
                      control = list(fnscale = -1, reltol = 1e-10))

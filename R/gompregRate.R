@@ -169,7 +169,7 @@ gompregRate <- function(X, Y, strata, offset, init, control){
     }
 
     ## NULL model:
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     res0 <- eha.optim.fun(beta0, Fmin, gr = dGomp,
                  control = list(fnscale = -1, reltol = 1e-10, 
                                 trace = printlevel),

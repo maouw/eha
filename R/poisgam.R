@@ -78,7 +78,7 @@ poisgam <- function(X, y, start.coef,
     
     par <- rep(0, p + 1)
     cat("res0: \n")
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     res0 <- eha.optim.fun(par, Pfun, gr = NULL,
                   X = X, y = y, cluster = cluster, offset = offset,
                   ##method = "L-BFGS-B",

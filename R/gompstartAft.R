@@ -28,7 +28,7 @@ gompstartAft <- function(enter, exit, event){
     alpha <- log(max(exit)) # start value
     ##from <- alpha - width / 2
     ##to <- alpha + width / 2
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     fit <- eha.optim.fun(alpha, funk, control = list(fnscale = -1))
     alpha <- fit$par
     S <- sum(exp(exit * exp(-alpha)) - exp(enter * exp(-alpha)))

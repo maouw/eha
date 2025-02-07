@@ -41,7 +41,7 @@ aftp0 <- function(printlevel, ns, nn, id,
         beta[2 * i - 1] <- log(sum(Y[, 2] - Y[, 1]) / sum(Y[, 3]))
         beta[2*i] <- 0
     }
-    eha.optim.fun <- if(getOption("eha.optim.method", default = "BFGS") == "ucminf" && requireNamespace("ucminf", quietly = TRUE)) ucminf::ucminf else function(...) optim(..., method =  getOption("eha.optim.method", default = "BFGS"))
+    eha.optim.fun <- get.eha.optim.fun()
     loglik.start <- -eha.optim.fun(beta, Fmin, hessian = FALSE)$value
     ## And now the real thing:
     ncov <- ncov.save

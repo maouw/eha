@@ -27,5 +27,5 @@ Suggests:
     knitr,
     rmarkdown,
     bookdown,
-    ucminf
+    optimx
 VignetteBuilder: knitr, utils
