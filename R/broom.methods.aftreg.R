@@ -1,4 +1,3 @@
-#' @export
 glance.aftreg <- function (x, ...)
 {
   stopifnot(requireNamespace("tibble",quietly=TRUE))
@@ -27,7 +26,6 @@ glance.aftreg <- function (x, ...)
   )
 }
 
-#' @export
 tidy.aftreg <- function (x,
                          conf.level = 0.95,
                          conf.int = FALSE,

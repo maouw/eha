@@ -1,4 +1,3 @@
-#' @export
 confint.aftreg <- function(object, parm, level = 0.95, ...) {
   stopifnot(all(
     c("coefficients", "loglik", "linear.predictors", "ttr") %in% names(object)
