@@ -1,18 +1,18 @@
 #' Prints aftreg objects
-#' 
-#' 
+#'
+#'
 #' @param object A \code{aftreg} object
 #' @param \dots Additional ...
-#' @param logical Use \code{\link{stats::drop1}} to compute `p` values based on log odds etc.
+#' @param use.drop1 logical; Use \code{\link[stats]{drop1}} to compute `p` values based on log odds etc.
 #' @author Göran Broström
 #' @seealso \code{\link{print.coxreg}}
 #' @keywords survival print
 #' @examples
-#' 
+#'
 #' ## The function is currently defined as
-#' function (object, ...) 
+#' function (object, ...)
 #' print(object)
-#' 
+#'
 #' @export
 summary.aftreg <- function(object, ..., use.drop1 = TRUE){
     if(use.drop1) {
@@ -25,13 +25,13 @@ summary.aftreg <- function(object, ..., use.drop1 = TRUE){
         hazards <- object$coefficients[-(1:ncoef)]
     }
     coefficients <- object$coefficients[1:ncoef]
-    
+
     ## Regression parameters:
     rawnames <- names(coefficients)
     varcoef <- diag(object$var[1:ncoef, 1:ncoef, drop = FALSE])
     varhaz <- diag(object$var[-(1:ncoef), -(1:ncoef), drop = FALSE])
     class(object) <- "summary.aftreg"
-    coefficients <- cbind(coefficients, 
+    coefficients <- cbind(coefficients,
                           exp(coefficients),
                           sqrt(varcoef))
     zval <- coefficients[, 1] / coefficients[, 3]
@@ -40,7 +40,7 @@ summary.aftreg <- function(object, ..., use.drop1 = TRUE){
     colnames(coefficients) <- c("coef", "exp(coef)", "se(coef)", "z", "Wald p"
     )
     rownames(coefficients) <- rawnames
-    
+
     ## Hazard parameters:
     if (!(object$dist == "pch")){
         haznames <- names(hazards)
@@ -52,5 +52,5 @@ summary.aftreg <- function(object, ..., use.drop1 = TRUE){
     object$coefficients <- coefficients
     object$hazards <- hazards
     object
-    
+
 }

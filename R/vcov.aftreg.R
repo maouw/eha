@@ -1,13 +1,14 @@
-#' @export
+# stats::vcov function for aftreg objects
+#' @exportS3Method stats::vcov
 vcov.aftreg <- function(object, complete = TRUE, ...) {
-  if (!complete && any(is.na(coef(object)))) {
-    keep <- !is.na(coef(object))
-    vv <- object$var[keep, keep, drop = FALSE]
-    vname <- names(coef(object))[keep]
-  } else {
-    vv <- object$var
-    vname <- names(coef(object))
-  }
-  dimnames(vv) <- list(vname, vname)
-  vv
+    if (!complete && any(is.na(coef(object)))) {
+        keep <- !is.na(coef(object))
+        vv <- object$var[keep, keep, drop = FALSE]
+        vname <- names(coef(object))[keep]
+    } else {
+        vv <- object$var
+        vname <- names(coef(object))
+    }
+    dimnames(vv) <- list(vname, vname)
+    vv
 }

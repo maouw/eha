@@ -11,7 +11,7 @@
 
 \item{\dots}{Additional ...}
 
-\item{logical}{Use \code{\link{stats::drop1}} to compute `p` values based on log odds etc.}
+\item{use.drop1}{logical; Use \code{\link[stats]{drop1}} to compute `p` values based on log odds etc.}
 }
 \description{
 Prints aftreg objects
@@ -19,7 +19,7 @@ Prints aftreg objects
 \examples{
 
 ## The function is currently defined as
-function (object, ...) 
+function (object, ...)
 print(object)
 
 }

@@ -34,6 +34,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Jianming Jin [contributor]
+  \item Altan Orhon \email{altan@uw.edu} [contributor]
 }
 
 }
