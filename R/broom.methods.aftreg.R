@@ -1,4 +1,5 @@
 # broom::glance method for aftreg objects
+#' @exportS3Method broom::glance 
 glance.aftreg <- function(x, ...) {
     iter <- x$call$control$maxiter %||% formals(eha::aftreg)$control$maxiter %||% NA_integer_
 
@@ -18,6 +19,7 @@ glance.aftreg <- function(x, ...) {
 }
 
 # broom::tidy method for aftreg.summary objects
+#' @exportS3Method broom::tidy 
 tidy.summary.aftreg <- function(x, conf.int = FALSE, conf.level = 0.95, exponentiate = FALSE, ...) {
     stopifnot(all(c("coefficients", "loglik", "linear.predictors", "ttr") %in% names(x)))
     ret <- tibble::as_tibble(cbind(data.frame(term = rownames(x$coefficients), stringsAsFactors = FALSE),
@@ -36,6 +38,7 @@ tidy.summary.aftreg <- function(x, conf.int = FALSE, conf.level = 0.95, exponent
     ret
 }
 # broom::tidy method for aftreg objects
+#' @exportS3Method broom::tidy 
 tidy.aftreg <- function(x, conf.int = FALSE, conf.level = 0.95, exponentiate = FALSE, ...) {
     summ <- summary(x, use.drop1 = FALSE)
     tidy.summary.aftreg(summ, conf.int = conf.int, conf.level = conf.level, exponentiate = exponentiate)
