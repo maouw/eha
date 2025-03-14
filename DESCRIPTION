@@ -1,6 +1,6 @@
 Package: eha
 Title: Event History Analysis
-Version: 2.11.5-9999.9000
+Version: 2.11.5-9999.9001
 Authors@R: c(
     person("Göran", "Broström", , "goran.brostrom@umu.se", role = c("aut", "cre")),
     person("Jianming", "Jin", role = "ctb"),
